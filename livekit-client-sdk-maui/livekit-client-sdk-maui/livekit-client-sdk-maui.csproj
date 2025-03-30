@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net9.0-tizen</TargetFrameworks> -->
+		<RootNamespace>livekit_client_sdk_maui</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="**\*.NoCompile.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Plugins\ffi-android-arm64\liblivekit_ffi.so" Pack="true" PackagePath="runtimes/android-arm64/native/" />
+		<None Include="Plugins\ffi-android-arm64\libwebrtc.jar" Pack="true" PackagePath="runtimes/android-arm64/native/" />
+		<None Include="Plugins\ffi-android-armv7\liblivekit_ffi.so" Pack="true" PackagePath="runtimes/android-arm/native/" />
+		<None Include="Plugins\ffi-android-armv7\libwebrtc.jar" Pack="true" PackagePath="runtimes/android-arm/native/" />
+		<None Include="Plugins\ffi-android-x86_64\libwebrtc.jar" Pack="true" PackagePath="runtimes/android-x86/native/" />
+		<None Include="Plugins\ffi-android-x86_64\libwebrtc.jar" Pack="true" PackagePath="runtimes/android-x64/native/" />
+		<None Include="Plugins\ffi-ios-arm64\liblivekit_ffi.a" Pack="true" PackagePath="runtimes/ios-arm64/native/" />
+		<None Include="Plugins\ffi-ios-sim-arm64\liblivekit_ffi.a" Pack="true" PackagePath="runtimes/iossimulator-arm64/native/" />
+		<None Include="Plugins\ffi-linux-arm64\liblivekit_ffi.so" Pack="true" PackagePath="runtimes/linux-arm64/native/" />
+		<None Include="Plugins\ffi-linux-x86_64\liblivekit_ffi.so" Pack="true" PackagePath="runtimes/linux-x64/native/" />
+		<None Include="Plugins\ffi-macos-arm64\liblivekit_ffi.dylib" Pack="true" PackagePath="runtimes/osx-arm64/native/" />
+		<None Include="Plugins\ffi-macos-x86_64\liblivekit_ffi.dylib" Pack="true" PackagePath="runtimes/osx-x64/native/" />
+		<None Include="Plugins\ffi-windows-arm64\livekit_ffi.dll" Pack="true" PackagePath="runtimes/win-arm64/native/" />
+		<None Include="Plugins\ffi-windows-x86_64\livekit_ffi.dll" Pack="true" PackagePath="runtimes/win-x64/native/" />
+		<None Include="Plugins\ffi-windows-x86_64\livekit_ffi.dll" Pack="true" PackagePath="runtimes/win-x86/native/" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Google.Protobuf" Version="3.30.2" />
+		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.3" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Plugin.Maui.Audio" Version="3.1.0" />
+	</ItemGroup>
+
+</Project>

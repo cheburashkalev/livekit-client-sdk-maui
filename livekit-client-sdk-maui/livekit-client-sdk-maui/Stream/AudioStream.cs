@@ -1,9 +1,9 @@
 using System;
-using UnityEngine;
 using LiveKit.Internal;
 using LiveKit.Proto;
 using System.Runtime.InteropServices;
 using LiveKit.Internal.FFIClients.Requests;
+using Plugin.Maui.Audio;
 
 namespace LiveKit
 {
@@ -18,7 +18,7 @@ namespace LiveKit
         private AudioResampler _resampler = new AudioResampler();
         private object _lock = new object();
 
-        public AudioStream(IAudioTrack audioTrack, AudioSource source) : this(audioTrack, new BasicAudioSource(source)) { }
+        public AudioStream(IAudioTrack audioTrack, IAudioPlayer source) : this(audioTrack, new BasicAudioSource(source)) { }
 
         public AudioStream(IAudioTrack audioTrack, RtcAudioSource source)
         {

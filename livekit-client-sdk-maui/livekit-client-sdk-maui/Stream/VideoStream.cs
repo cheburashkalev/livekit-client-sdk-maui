@@ -1,7 +1,6 @@
 using System;
 using LiveKit.Internal;
 using LiveKit.Proto;
-using UnityEngine;
 using LiveKit.Internal.FFIClients.Requests;
 using System.Collections;
 
@@ -10,7 +9,7 @@ namespace LiveKit
     public class VideoStream
     {
         public delegate void FrameReceiveDelegate(VideoFrame frame);
-        public delegate void TextureReceiveDelegate(Texture2D tex2d);
+        public delegate void TextureReceiveDelegate(byte[] tex2d);
         public delegate void TextureUploadDelegate();
 
         internal readonly FfiHandle Handle;
@@ -29,7 +28,7 @@ namespace LiveKit
 
         /// The texture changes every time the video resolution changes.
         /// Can be null if UpdateRoutine isn't started
-        public Texture2D Texture { private set; get; }
+        public byte[] Texture { private set; get; }
         public VideoFrameBuffer VideoBuffer { private set; get; }
 
         protected bool _playing = false;
@@ -71,7 +70,7 @@ namespace LiveKit
             {
                 if (disposing)
                     VideoBuffer?.Dispose();
-                if (Texture != null) UnityEngine.Object.Destroy(Texture);
+                if (Texture != null) Array.Clear(Texture);
                 _disposed = true;
             }
         }
@@ -104,22 +103,22 @@ namespace LiveKit
                 var rHeight = VideoBuffer.Height;
 
                 var textureChanged = false;
-                if (Texture == null || Texture.width != rWidth || Texture.height != rHeight)
-                {
-                    if (Texture != null) UnityEngine.Object.Destroy(Texture);
-                    Texture = new Texture2D((int)rWidth, (int)rHeight, TextureFormat.RGBA32, false);
-                    Texture.ignoreMipmapLimit = false;
-                    textureChanged = true;
-                }
-                var rgba = VideoBuffer.ToRGBA();
-                {
-                    Texture.LoadRawTextureData((IntPtr)rgba.Info.DataPtr, (int)rgba.GetMemorySize()); 
-                }
-                Texture.Apply();
-
-                if (textureChanged)
-                    TextureReceived?.Invoke(Texture);
-
+                //if (Texture == null || Texture.width != rWidth || Texture.height != rHeight)
+                //{
+                //    if (Texture != null) Array.Clear(Texture);
+                //    Texture = new Texture2D((int)rWidth, (int)rHeight, TextureFormat.RGBA32, false);
+                //    Texture.ignoreMipmapLimit = false;
+                //    textureChanged = true;
+                //}
+                //var rgba = VideoBuffer.ToRGBA();
+                //{
+                //    Texture.LoadRawTextureData((IntPtr)rgba.Info.DataPtr, (int)rgba.GetMemorySize()); 
+                //}
+                //Texture.Apply();
+                //
+                //if (textureChanged)
+                //    TextureReceived?.Invoke(Texture);
+                //
                 TextureUploaded?.Invoke();
             }
 
